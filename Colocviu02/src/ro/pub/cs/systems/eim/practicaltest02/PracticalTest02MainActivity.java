@@ -4,14 +4,46 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 
 public class PracticalTest02MainActivity extends Activity {
+	
+	TextView serverTextView, clientTextView, response;
+	EditText serverEditText, clientAddress,clientPort;
+	Button serverConnect, Request;
+	
+	private ButtonListener buttonListener = new ButtonListener();
+	
+	private ClientThread clientThread = new ClientThread(clientAddress.getText().toString(),Integer.parseInt( clientPort.getText().toString()),response);
+	private ServerThread serverThread = new ServerThread(Integer.parseInt( serverEditText.getText().toString()));
+	 private class ButtonListener implements Button.OnClickListener {
 
+	        @Override
+	        public void onClick(View view) {
+	            switch (view.getId()) {
+	                case R.id.server_connect_button:
+	                	serverThread.start();
+	                    break;
+	                case R.id.client_button:
+	                   clientThread.start();
+	                    break;
+	            }
+	        }
+	    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practical_test02_main);
+        
+        serverConnect = (Button)findViewById(R.id.server_connect_button);
+        serverConnect.setOnClickListener(buttonListener);
+        
+        Request = (Button)findViewById(R.id.client_button);
+        Request.setOnClickListener(buttonListener);
     }
 
 
